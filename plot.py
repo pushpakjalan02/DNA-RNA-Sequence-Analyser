@@ -23,11 +23,16 @@ def plotAminoPercentage(amino_seq):
     merge_sort(list_x, list_y, 0, len(list_x)-1)
 
     plt.bar([i for i in range(1, len(list_x) + 1)], list_y, tick_label = list_x, width = 0.9, color = ['blue', 'red'])
+    for index, value in enumerate(list_y):
+        plt.text(index + 1, value, str(int(value * 10) / 10.0), ha = 'center')
 
     plt.xlabel('Amino Acid')
     plt.ylabel('Percentage')
 
     plt.title('Amino Acid Percentage Bar Chart')
+
+    figManager = plt.get_current_fig_manager()
+    figManager.window.state("zoomed")
 
     plt.show()
     return
@@ -69,17 +74,33 @@ def plotATGCSkew(code_seq):
 
     plt.figure()
     plt.plot(x_axis, AT_Cumulative_Freq)
+    if(AT_Cumulative_Freq != []):
+        ATmaxIndex = AT_Cumulative_Freq.index(max(AT_Cumulative_Freq))
+        ATminIndex = AT_Cumulative_Freq.index(min(AT_Cumulative_Freq))
+        ATscatterPlotX = [ATminIndex, ATmaxIndex]
+        ATscatterPlotY = [AT_Cumulative_Freq[ATminIndex], AT_Cumulative_Freq[ATmaxIndex]]
+        plt.scatter(ATscatterPlotX, ATscatterPlotY, color = 'red')
+        plt.annotate('Min', (ATscatterPlotX[0], ATscatterPlotY[0]))
+        plt.annotate('Max', (ATscatterPlotX[1], ATscatterPlotY[1]))
     plt.title('AT-Skew')
 
     figManager = plt.get_current_fig_manager()
-    figManager.full_screen_toggle()
+    figManager.window.state("zoomed")
 
     plt.figure()
     plt.plot(x_axis, GC_Cumulative_Freq)
+    if(GC_Cumulative_Freq != []):
+        GCmaxIndex = GC_Cumulative_Freq.index(max(GC_Cumulative_Freq))
+        GCminIndex = GC_Cumulative_Freq.index(min(GC_Cumulative_Freq))
+        GCscatterPlotX = [GCminIndex, GCmaxIndex]
+        GCscatterPlotY = [GC_Cumulative_Freq[GCminIndex], GC_Cumulative_Freq[GCmaxIndex]]
+        plt.scatter(GCscatterPlotX, GCscatterPlotY, color = 'red')
+        plt.annotate('Min', (GCscatterPlotX[0], GCscatterPlotY[0]))
+        plt.annotate('Max', (GCscatterPlotX[1], GCscatterPlotY[1]))
     plt.title('GC_Skew')
 
     figManager = plt.get_current_fig_manager()
-    figManager.full_screen_toggle()
+    figManager.window.state("zoomed")
 
     plt.show()
     return

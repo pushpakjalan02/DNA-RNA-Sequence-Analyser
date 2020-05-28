@@ -71,23 +71,17 @@ def getNextValidSequence(file_read):
         file_read.file.seek(file_read.file.tell() - len(line),0)
         if(checkMultiple(len(code_seq), 3) == False or stopInBetween(code_seq) == True or stopAtEnd(code_seq) == False or not(allIn(code_seq, ['A','T','G','C']) or allIn(code_seq, ['A','U','G','C']))):
             print('Invalid Sequence Found')
-            print('1 - Try Next Sequence')
-            print('Else - Return to Main Menu')
-            response = getInt()
-            if(response == 1):
-                return getNextValidSequence(file_read)
-            else:
-                return ('','',0)
+            return (seq_info, code_seq, 0)
         return (seq_info, code_seq, 1)
     else:
-        print('Invalid Sequence Found')
+        print('Invalid Sequence Found. Missing Sequence Info.')
         print('1 - Try Next Sequence')
         print('Else - Return to Main Menu')
         response = getInt()
         if(response == 1):
             return getNextValidSequence(file_read)
         else:
-            return('','', 0)
+            return ('','',0)
     return
 
 def getAminoSequence(code_seq):
@@ -108,63 +102,83 @@ def processNextSequence(file_read, file_write, database):
     (seq_info, code_seq, valid) = getNextValidSequence(file_read)
     
     if(valid == 0):
+        amino_seq = ''
+        if(seq_info == ''):
+            return
+        while(True):
+            print()
+            print('Options Available:')
+            print('1 - Plot AT/GC Skew')
+            print('Else - Back')
+            response = getInt()
+
+            if(response == 1):
+                plotATGCSkew(code_seq)
+            else:
+                break
         return
 
-    amino_seq = getAminoSequence(code_seq)
+    else:    
+        amino_seq = getAminoSequence(code_seq)
     
-    while(True):
-        print()
-        print('1 - Print Amino Sequence')
-        print('2 - Push to File')
-        print('3 - Push to Database')
-        print('4 - Plot Amino Percentage')
-        print('5 - Plot AT/GC Skew')
-        print('Else - Back')
-        response = getInt()
-
-        if(response == 1):
+        while(True):
             print()
-            print(seq_info)
-            print(code_seq)
-            print(amino_seq)
-        elif(response == 2):
-            if(file_written == 1):
-                while(1):
-                    answer = input('Write again into file? Y/N: ')
-                    if(answer == 'Y'):
-                        file_written = 0
-                        break
-                    elif(answer == 'N'):
-                        break
-                    else:
-                        print('Enter Valid Response')
-                        continue
-            if(file_written == 0):
-                data = seq_info + '\n' + code_seq + '\n' + amino_seq + '\n\n'
-                file_write.addToFile(data)
-                file_written = 1
-        elif(response == 3):
-            if(database_written == 1):
-                while(1):
-                    answer = input('Write again into database? Y/N: ')
-                    if(answer == 'Y'):
-                        database_written = 0
-                        break
-                    elif(answer == 'N'):
-                        break
-                    else:
-                        print('Enter Valid Response')
-                        continue
-            if(database_written == 0):
-                database.doc_count += 1
-                data = {'Sl No': database.doc_count, 'Seq Info': seq_info, 'Code Seq': code_seq, 'Length Code Seq': len(code_seq), 'Amino Seq': amino_seq, 'Length Amino Seq': len(amino_seq)}
-                database.dBInsertOne(data)
-                database_written = 1
-        elif(response == 4):
-            plotAminoPercentage(amino_seq)
-        elif(response == 5):
-            plotATGCSkew(code_seq)
-        else:
-            break
-    return
+            print('1 - Print Amino Sequence')
+            print('2 - Push to File')
+            print('3 - Push to Database')
+            print('4 - Plot Amino Percentage')
+            print('5 - Plot AT/GC Skew')
+            print('Else - Back')
+            response = getInt()
 
+            if(response == 1):
+                print()
+                print(seq_info)
+                print(code_seq)
+                print(amino_seq)
+            elif(response == 2):
+                if(file_write.valid == 0):
+                    print('Write File Not Set. Set it in Output File Settings')
+                    continue
+                if(file_written == 1):
+                    while(1):
+                        answer = input('Write again into file? Y/N: ')
+                        if(answer == 'Y'):
+                            file_written = 0
+                            break
+                        elif(answer == 'N'):
+                            break
+                        else:
+                            print('Enter Valid Response')
+                            continue
+                if(file_written == 0):
+                    data = seq_info + '\n' + code_seq + '\n' + amino_seq + '\n\n'
+                    file_write.addToFile(data)
+                    file_written = 1
+            elif(response == 3):
+                if(database.valid == 0):
+                    print('Database Info. Not Set. Please set it in Database Settings')
+                    continue
+                if(database_written == 1):
+                    while(1):
+                        answer = input('Write again into database? Y/N: ')
+                        if(answer == 'Y'):
+                            database_written = 0
+                            break
+                        elif(answer == 'N'):
+                            break
+                        else:
+                            print('Enter Valid Response')
+                            continue
+                if(database_written == 0):
+                    database.doc_count += 1
+                    data = {'Sl No': database.doc_count, 'Seq Info': seq_info, 'Code Seq': code_seq, 'Length Code Seq': len(code_seq), 'Amino Seq': amino_seq, 'Length Amino Seq': len(amino_seq)}
+                    database.dBInsertOne(data)
+                    database_written = 1
+            elif(response == 4):
+                plotAminoPercentage(amino_seq)
+            elif(response == 5):
+                plotATGCSkew(code_seq)
+            else:
+                break
+        return

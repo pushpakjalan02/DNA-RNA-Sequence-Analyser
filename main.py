@@ -14,6 +14,7 @@ def main():
     database.openDBInstance("URL: ", "Database Name: ", "Collection Name: ")
     
     while(True):
+        print()
         print('0 - Exit')
         print('1 - Input File Settings')
         print('2 - Output File Settings')
@@ -30,6 +31,7 @@ def main():
                 database.closeClient()
             sys.exit()  
         elif(response == 1):
+            print()
             print('1 - Close File')
             print('2 - Open File')
             print('Else - Back')
@@ -44,6 +46,7 @@ def main():
             else:
                 pass
         elif(response == 2):
+            print()
             print('1 - Close File')
             print('2 - Open File')
             print('Else - Back')
@@ -58,6 +61,7 @@ def main():
             else:
                 pass
         elif(response == 3):
+            print()
             print('1 - Close Database')
             print('2 - Open Database')
             print('3 - Delete Database')
@@ -80,6 +84,9 @@ def main():
             else:
                 pass
         elif(response == 4):
+            if(file_read.valid == 0):
+                print('No Input File. Please Set it in Input File Settings')
+                continue
             processNextSequence(file_read, file_write, database)
         else:
             print('Please Enter Nos. between 0-4')
