@@ -15,6 +15,7 @@ def main():
     
     while(True):
         print()
+        print('--------Main Menu--------')
         print('0 - Exit')
         print('1 - Input File Settings')
         print('2 - Output File Settings')
@@ -32,6 +33,7 @@ def main():
             sys.exit()  
         elif(response == 1):
             print()
+            print('---Input File Settings---')
             print('1 - Close File')
             print('2 - Open File')
             print('Else - Back')
@@ -47,6 +49,7 @@ def main():
                 pass
         elif(response == 2):
             print()
+            print('---Output File Settings---')
             print('1 - Close File')
             print('2 - Open File')
             print('Else - Back')
@@ -62,6 +65,7 @@ def main():
                 pass
         elif(response == 3):
             print()
+            print('---Database Settings---')
             print('1 - Close Database')
             print('2 - Open Database')
             print('3 - Delete Database')

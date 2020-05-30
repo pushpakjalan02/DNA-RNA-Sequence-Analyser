@@ -1,6 +1,6 @@
 def getInt():
     try:
-        value = int(input())
+        value = int(input('Response: '))
     except:
         print('Invalid Value. Re-Enter.')
         value = getInt()

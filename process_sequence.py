@@ -70,7 +70,8 @@ def getNextValidSequence(file_read):
             line = file_read.file.readline()
         file_read.file.seek(file_read.file.tell() - len(line),0)
         if(checkMultiple(len(code_seq), 3) == False or stopInBetween(code_seq) == True or stopAtEnd(code_seq) == False or not(allIn(code_seq, ['A','T','G','C']) or allIn(code_seq, ['A','U','G','C']))):
-            print('Invalid Sequence Found')
+            print()
+            print('---Invalid Sequence Found---')
             return (seq_info, code_seq, 0)
         return (seq_info, code_seq, 1)
     else:
@@ -107,13 +108,18 @@ def processNextSequence(file_read, file_write, database):
             return
         while(True):
             print()
-            print('Options Available:')
+            print('------Process Sequence------')
+            print('---Only Options Available---')
             print('1 - Plot AT/GC Skew')
+            print('2 - Process Next Sequence')
             print('Else - Back')
             response = getInt()
 
             if(response == 1):
                 plotATGCSkew(code_seq)
+            elif(response == 2):
+                processNextSequence(file_read, file_write, database)
+                break
             else:
                 break
         return
@@ -123,12 +129,14 @@ def processNextSequence(file_read, file_write, database):
     
         while(True):
             print()
+            print('------Process Sequence------')
             print('1 - Print Amino Sequence')
             print('2 - Push to File')
             print('3 - Push to Database')
             print('4 - Plot Amino Percentage')
             print('5 - Plot AT/GC Skew')
-            print('Else - Back')
+            print('6 - Process Next Sequence')
+            print('Else - Back to Main Menu')
             response = getInt()
 
             if(response == 1):
@@ -179,6 +187,9 @@ def processNextSequence(file_read, file_write, database):
                 plotAminoPercentage(amino_seq)
             elif(response == 5):
                 plotATGCSkew(code_seq)
+            elif(response == 6):
+                processNextSequence(file_read, file_write, database)
+                break
             else:
                 break
         return
